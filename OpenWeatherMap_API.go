@@ -3,3 +3,6 @@ type SearchResults struct {
     Query   string
     Results []Result
 }
+type Result struct {
+    Name, Description, URL string
+}
