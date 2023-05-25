@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
-
-	owm "github.com/briandowns/openweathermap"
 )
 
 type SearchResults struct {
@@ -17,14 +16,18 @@ type Result struct {
 	Name, Description, URL string
 }
 
-var apiKey = os.Getenv("OWM_API_KEY")
-
 func main() {
-	w, err := owm.NewCurrent("F", "ru", apiKey)
+	file, err := os.Open("api_key.txt")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
+	defer func() {
+		if err = file.Close(); err != nil {
+			log.Fatal(err)
+		}
+	}()
 
-	w.CurrentByName("Ekb")
-	fmt.Println(w)
+	b, err := ioutil.ReadAll(file)
+	var apiKey = (string(b))
+	fmt.Println(string(apiKey))
 }
